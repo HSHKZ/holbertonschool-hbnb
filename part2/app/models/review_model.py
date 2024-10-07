@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app import db
+from sqlalchemy.exc import IntegrityError
 
 class Review(db.Model):
     __tablename__ = 'reviews'
@@ -16,3 +17,9 @@ class Review(db.Model):
 
     user = relationship("User", back_populates="reviews")
     place = relationship("Place", back_populates="reviews")
+
+    def validate(self):
+        if not self.text:
+            raise ValueError("Review text cannot be empty")
+        if len(self.text) > 500:
+            raise ValueError("Review text cannot exceed 500 characters")
