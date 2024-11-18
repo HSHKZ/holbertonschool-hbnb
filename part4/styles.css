@@ -2,28 +2,78 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #f9f9f9;
 }
-header, footer, nav {
-  text-align: center;
-  padding: 10px;
-}
-footer {
-  background: #f4f4f4;
-}
-.place-card, .review-card {
-  margin: 20px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background: #fff;
-}
-form {
+
+header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px;
   display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin: 20px;
+  justify-content: space-between;
+  align-items: center;
 }
-form label {
+
+header .logo {
+  height: 40px;
+}
+
+header .login-button {
+  color: white;
+  text-decoration: none;
   font-weight: bold;
 }
 
+nav {
+  background-color: #333;
+  padding: 10px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+main {
+  padding: 20px;
+}
+
+#price-filter {
+  margin-bottom: 20px;
+  padding: 5px;
+}
+
+#places-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.place-card {
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: calc(33.333% - 20px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.place-card h2 {
+  font-size: 1.2em;
+  margin: 0 0 10px;
+}
+
+.place-card p {
+  margin: 5px 0;
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
