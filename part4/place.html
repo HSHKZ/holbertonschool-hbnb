@@ -1,23 +1,32 @@
-<main>
-  <section class="place-details">
-    <h1>Place Name</h1>
-    <div class="place-info">
-      <p>Host: John Doe</p>
-      <p>Price: $120/night</p>
-      <p>Description: Lorem ipsum dolor sit...</p>
-      <ul>
-        <li>Amenity 1</li>
-        <li>Amenity 2</li>
-      </ul>
-    </div>
-    <section class="reviews">
-      <div class="review-card">
-        <p>Comment: Great place!</p>
-        <p>By: User123</p>
-        <p>Rating: 5/5</p>
-      </div>
-    </section>
-    <a href="add_review.html" class="add-review">Add Review</a>
-  </section>
-</main>
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails du lieu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <img src="logo.png" class="logo" alt="Logo de l'application">
+        <a href="login.html" id="login-link" class="login-button">Connexion</a>
+    </header>
+    <nav>
+        <a href="index.html">Accueil</a>
+    </nav>
+    <main>
+        <section id="place-details"></section>
+        <section id="add-review">
+            <h3>Ajouter un avis</h3>
+            <form id="review-form">
+                <textarea id="review-text" rows="4" placeholder="Votre avis..." required></textarea>
+                <button type="submit">Soumettre</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 Tous droits réservés.</p>
+    </footer>
+    <script src="scripts.js"></script>
+</body>
+</html>
