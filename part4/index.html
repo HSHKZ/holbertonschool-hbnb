@@ -1,8 +1,23 @@
-<section>
-  <div class="place-card">
-    <h2>Place Name</h2>
-    <p>Price: $100/night</p>
-    <a href="place.html" class="details-button">View Details</a>
-  </div>
-</section>
-
+<header>
+  <img src="logo.png" class="logo" alt="Logo de l'application">
+  <a href="login.html" id="login-link" class="login-button">Connexion</a>
+</header>
+<nav>
+  <a href="index.html">Accueil</a>
+</nav>
+<main>
+  <section>
+    <label for="price-filter">Filtrer par prix :</label>
+    <select id="price-filter">
+      <option value="all">Tous</option>
+      <option value="10">10€</option>
+      <option value="50">50€</option>
+      <option value="100">100€</option>
+    </select>
+  </section>
+  <section id="places-list"></section>
+</main>
+<footer>
+  <p>© 2024 Tous droits réservés.</p>
+</footer>
+<script src="scripts.js"></script>
