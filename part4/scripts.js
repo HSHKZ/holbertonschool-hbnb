@@ -1,4 +1,10 @@
-// Fonction pour récupérer un cookie par son nom
+// Récupère l'ID du lieu à partir de l'URL
+function getPlaceIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('placeId');
+}
+
+// Récupère un cookie par son nom
 function getCookie(name) {
     const cookieArr = document.cookie.split(';');
     for (let cookie of cookieArr) {
@@ -13,20 +19,20 @@ function getCookie(name) {
 // Vérifie si l'utilisateur est authentifié
 function checkAuthentication() {
     const token = getCookie('token');
-    const loginLink = document.getElementById('login-link');
+    const addReviewSection = document.getElementById('add-review');
 
     if (!token) {
-        loginLink.style.display = 'block';
+        addReviewSection.style.display = 'none';
     } else {
-        loginLink.style.display = 'none';
-        fetchPlaces(token);
+        addReviewSection.style.display = 'block';
+        fetchPlaceDetails(token, getPlaceIdFromURL());
     }
 }
 
-// Récupère les lieux à partir de l'API
-async function fetchPlaces(token) {
+// Récupère les détails du lieu à partir de l'API
+async function fetchPlaceDetails(token, placeId) {
     try {
-        const response = await fetch('https://your-api-url/places', {
+        const response = await fetch(`https://your-api-url/places/${placeId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -35,51 +41,66 @@ async function fetchPlaces(token) {
         });
 
         if (response.ok) {
-            const places = await response.json();
-            displayPlaces(places);
+            const place = await response.json();
+            displayPlaceDetails(place);
         } else {
-            console.error('Erreur lors de la récupération des lieux:', response.statusText);
+            console.error('Erreur lors de la récupération des détails du lieu:', response.statusText);
         }
     } catch (error) {
         console.error('Erreur de requête:', error);
     }
 }
 
-// Affiche dynamiquement les lieux dans la section #places-list
-function displayPlaces(places) {
-    const placesList = document.getElementById('places-list');
-    placesList.innerHTML = ''; // Vide le contenu actuel
-
-    places.forEach(place => {
-        const placeCard = document.createElement('div');
-        placeCard.className = 'place-card';
-        placeCard.innerHTML = `
-            <h2>${place.name}</h2>
-            <p>${place.description}</p>
-            <p>Localisation : ${place.location}</p>
-            <p>Prix : ${place.price}€ par nuit</p>
-        `;
-        placesList.appendChild(placeCard);
-    });
+// Affiche dynamiquement les détails du lieu
+function displayPlaceDetails(place) {
+    const placeDetails = document.getElementById('place-details');
+    placeDetails.innerHTML = `
+        <h1>${place.name}</h1>
+        <p>${place.description}</p>
+        <p>Prix : ${place.price}€ par nuit</p>
+        <h3>Commodités :</h3>
+        <ul>
+            ${place.amenities.map(amenity => `<li>${amenity}</li>`).join('')}
+        </ul>
+        <h3>Avis :</h3>
+        <div id="reviews">
+            ${place.reviews.length > 0 ? place.reviews.map(review => `<p>${review}</p>`).join('') : '<p>Aucun avis pour le moment.</p>'}
+        </div>
+    `;
 }
 
-// Filtre les lieux en fonction du prix sélectionné
-document.getElementById('price-filter').addEventListener('change', (event) => {
-    const selectedPrice = event.target.value;
-    const places = document.querySelectorAll('.place-card');
+// Soumet un nouvel avis
+async function submitReview(event) {
+    event.preventDefault();
 
-    places.forEach(place => {
-        const price = parseInt(place.querySelector('p:nth-child(4)').textContent.match(/\d+/)[0]);
+    const token = getCookie('token');
+    const placeId = getPlaceIdFromURL();
+    const reviewText = document.getElementById('review-text').value;
 
-        if (selectedPrice === 'all' || price <= parseInt(selectedPrice)) {
-            place.style.display = 'block';
+    try {
+        const response = await fetch(`https://your-api-url/places/${placeId}/reviews`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ review: reviewText }),
+        });
+
+        if (response.ok) {
+            const updatedPlace = await response.json();
+            displayPlaceDetails(updatedPlace);
+            document.getElementById('review-form').reset();
         } else {
-            place.style.display = 'none';
+            console.error('Erreur lors de l\'ajout de l\'avis:', response.statusText);
         }
-    });
-});
+    } catch (error) {
+        console.error('Erreur de requête:', error);
+    }
+}
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
     checkAuthentication();
+    document.getElementById('review-form').addEventListener('submit', submitReview);
 });
